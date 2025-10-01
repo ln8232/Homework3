@@ -67,7 +67,19 @@ ggplot(data, aes(x = design, y = sales, fill = design)) +
        fill = "Design",
        title = "Distribution of Sales by Website Design") +
   theme_minimal()
+
+# Confidence interval
+model <- lm(sales ~ design, data = data)
+confint(model)
 ```
+
+Supporting premise statements:
+
+1. The scatterplot of sales versus number of items purchased shows that the new design generally has higher sales than the old design, with horizontal dashed lines indicating higher average sales for the new design.
+
+2. The boxplot of sales by website design shows that the distribution of sales for the new design is shifted upward relative to the old design, with the median being higher.
+
+3. A linear regression of sales on design shows that the new design has an estimated increase in sales of \$3.67 per customer, with a 95% confidence interval from \$2.78 to \$4.55, exceeding \$1.80.
 
 ### (b)
 
@@ -79,7 +91,7 @@ The average sale per customer under the new design is approximately \$35.51, com
 
 You must address the question of whether the redesign will lead to an average increase in sales of at least $1.80 per customer
 
-Both the mean and median increases exceed \$1.80 per customer, indicating that the redesign is expected, on average, to increase sales by at least $1.80 per customer.
+Both the mean and median increases exceed \$1.80 per customer, indicating that the redesign is expected, on average, to increase sales by at least $1.80 per customer. Also, the 95% confidence interval shows that the lower bound of \$2.78 exceeds \$1.80, providing further evidence that the redesign will increase sales.
 
 ## Part 3
 
