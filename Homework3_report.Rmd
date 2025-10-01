@@ -1,0 +1,94 @@
+---
+title: "Homework 3 Report"
+author: "Larry Nguyen"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Setup
+
+```{r, message=FALSE, warning=FALSE}
+# Load packages
+library(tidyverse)
+library(colorfindr)
+
+# Load data
+data <- read_csv("homework3_data.csv")
+data <- mutate(data, design = factor(design, levels = c(0, 1), labels = c("Old", "New")))
+
+# Load Zeiss color palette (Part 3)
+colors <- get_colors("C:/Users/Admin/Pictures/Capture.PNG")
+colors <- make_palette(colors[1:100,])
+```
+
+## Part 1
+
+Make a recommendation to the company: Should they commit to redesigning the web site based on the criteria for success that they laid out?
+
+Yes, the company should commit to redesigning the website because the data shows (part 2) that it would lead to an average increase in sales of at least $1.80 per customer. 
+
+## Part 2
+
+Provide supporting evidence for your recommendation.
+
+### (a)
+
+You must use at least 2 graphical presentations that support your recommendation
+
+```{r, message=FALSE, warning=FALSE}
+# Get mean sales from old and new designs
+mean_sales <- group_by(data, design) %>%
+  summarise(mean_sales = mean(sales))
+
+# Get median sales from old and new designs
+median_sales <- group_by(data, design) %>%
+  summarise(median_sales = median(sales))
+
+# Plot 1
+ggplot(data, aes(x = factor(items), y = sales, color = design)) +
+  geom_point() +
+  geom_hline(data = mean_sales, aes(yintercept = mean_sales, color = design), linetype = "dashed", size = 1) +
+  scale_color_manual(values = c("#0F2DB3", "#7183D2")) +
+  labs(x = "Number of Items Purchased",
+       y = "Sales ($)",
+       color = "Design",
+       title = "Sales vs Items by Website Design") +
+  theme_minimal()
+
+# Plot 2
+ggplot(data, aes(x = design, y = sales, fill = design)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("#0F2DB3", "#7183D2")) +
+  labs(x = "Website Design",
+       y = "Sales ($)",
+       fill = "Design",
+       title = "Distribution of Sales by Website Design") +
+  theme_minimal()
+```
+
+### (b)
+
+You must estimate how much sales will increase/decrease if the redesign is done.
+
+The average sale per customer under the new design is approximately \$35.51, compared to \$31.85 under the old design, giving an estimated increase of \$3.67 per customer (as shown in Plot 1 with horizontal mean lines). The median sales also increase from \$32.01 to \$35.27, an estimated increase of \$3.26 per customer (as shown in Plot 2 with the boxplot). Thus, the overall increase in sales is estimated to be between \$3.26 to \$3.67 per customer when the redesign is done.
+
+### (c)
+
+You must address the question of whether the redesign will lead to an average increase in sales of at least $1.80 per customer
+
+Both the mean and median increases exceed \$1.80 per customer, indicating that the redesign is expected, on average, to increase sales by at least $1.80 per customer.
+
+## Part 3
+
+Your graphical presentations must use the “company” color palette.
+
+The color palette used for plots is derived from the company, Zeiss.
+
+## Part 4
+
+Consider your final recommendation as the primary statement. State an alternative statement and make a fault tree for that statement
+
+The observed increase from the data may not be due to the design itself, but rather by special offers and discounts. For instance, the new design may have been giving out promotions for select customers, such as loyal shoppers or users in specific regions, which could have temporarily increased the average sale per customer independently of the website design.
